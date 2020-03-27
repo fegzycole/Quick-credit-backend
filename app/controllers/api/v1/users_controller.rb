@@ -9,7 +9,8 @@ module Api
           token = JsonWebToken.encode(user_id: @user.id, isAdmin: @user.isAdmin)
           time = Time.now + 24.hours.to_i
           render json: { token: token, exp: time.strftime('%m-%d-%Y %H:%M'),
-                         username: @user.username }, status: :ok
+                         id: @user.id, firstName: @user.firstName,
+                         lastName: @user.lastName, email: @user.email }, status: :ok
         else
           render json: { errors: @user.errors.full_messages },
                  status: :unprocessable_entity
@@ -19,8 +20,8 @@ module Api
       private
 
       def user_params
-        params.require(:user).permit(:firstName, :lastName,
-                                     :email, :password, :password_confirmation, :address, :isAdmin)
+        params.permit(:firstName, :lastName,
+                      :email, :password, :password_confirmation, :address, :isAdmin)
       end
     end
   end
